@@ -8,14 +8,23 @@
 #define PDSP_2PI_DIV_FS     ((M_PI *2.0f)/8000.0f)
 
 /**
+ * @brief Structure with name of oscillator
+ * 
+ */
+typedef struct {
+	char type[20];
+}Gen_Type_t;
+
+/**
  * @brief Structure with oscillator parameters
  * 
  */
 typedef struct {
-	//GenType
+	Gen_Type_t gen;
 	float amplituda;
 	float frequency;
 	uint32_t n;
+	float fill;
 }OSC_Cfg_t;
 
 /**
