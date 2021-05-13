@@ -5,6 +5,8 @@
 #define pdsp_sinf(fi)       sinf(fi)
 #define PDSP_2PI_DIV_FS     ((M_PI *2.0f)/8000.0f)
 
+FILE *f;
+
 typedef struct {
 	//GenType
 	float amplituda;
@@ -16,7 +18,6 @@ OSC_Cfg_t Gen1;
 
 int8_t OSC_GetValue(OSC_Cfg_t *cfg){
 	float y;
-
 	y = cfg->amplituda * pdsp_sinf(PDSP_2PI_DIV_FS * cfg->frequency * cfg->n);
 	cfg->n++;
 
@@ -39,13 +40,18 @@ void OSC_SetAmplitude(OSC_Cfg_t *cfg, float A){
 
 int main(int argc, char const *argv[])
 {
+    //printf("Liczba argumentow: %d, argument nr.0: %s", argc, argv[0]);
     OSC_Init(&Gen1, 100, 1000);
 
-    printf("y = [");
+    f = fopen("test.m", "w");
+
+    fprintf(f,"y = [");
     for (uint32_t i = 0; i < 9; i++){
-        printf("%d, ", OSC_GetValue(&Gen1));
+        fprintf(f, "%d, ", OSC_GetValue(&Gen1));
     }
-    printf("%d];", OSC_GetValue(&Gen1));
+    fprintf(f, "%d];", OSC_GetValue(&Gen1));
+
+    fclose(f);
 
     return 0;
 }
