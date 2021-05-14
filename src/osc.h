@@ -4,24 +4,17 @@
 #include "stdint.h"
 #include "math.h"
 
-#define pdsp_sinf(fi)       sinf(fi)   
-#define PDSP_2PI_DIV_FS     ((M_PI *2.0f)/8000.0f)
-
-/**
- * @brief Structure with name of oscillator
- * 
- */
-typedef struct {
-	char type[20];
-}Gen_Type_t;
+#define pdsp_sinf(fi)       sinf(fi)  
+#define FS					8000.0f
+#define PDSP_2PI_DIV_FS     ((M_PI *2.0f)/FS)
 
 /**
  * @brief Structure with oscillator parameters
  * 
  */
 typedef struct {
-	Gen_Type_t gen;
-	float amplituda;
+	uint8_t type;
+	float amplitude;
 	float frequency;
 	uint32_t n;
 	float fill;
@@ -30,11 +23,13 @@ typedef struct {
 /**
  * @brief Oscillator initialization method
  * 
- * @param cfg Generator structure
- * @param A Amplitude
+ * @param cfg Oscillator structire
+ * @param A Aamplitude
  * @param f Frequency
+ * @param sfill Fill signal
+ * @param tp type of oscillator
  */
-void OSC_Init(OSC_Cfg_t *cfg, float A, float f);
+void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill, uint8_t tp);
 
 /**
  * @brief Generator executing function
@@ -59,5 +54,11 @@ void OSC_SetFrequency(OSC_Cfg_t *cfg, float f);
  * @param A Amplitude
  */
 void OSC_SetAmplitude(OSC_Cfg_t *cfg, float A);
+
+//////////////
+
+// float sign_function(float wynik);
+
+// int8_t OSC_GetSquer(OSC_Cfg_t * cfg);
 
 #endif  // OSC_H_
