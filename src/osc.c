@@ -1,3 +1,13 @@
+/**
+ * @file osc.c
+ * @author Kacper Janowski
+ * @brief 
+ * @version 0.1
+ * @date 2021-05-13
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #include "osc.h"
 
 void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill, uint8_t tp){
@@ -18,17 +28,27 @@ int8_t OSC_GetValue(OSC_Cfg_t *cfg){
 		cfg->n++;
 		break;
 	case 2:		// type = 2 - sygnal prostokatny
-		sample_fill = (cfg->fill/100.0f)*(FS/cfg->frequency);
+		sample_fill = (cfg->fill/100.0f)*(FS/cfg->frequency); // obliczenie wspolczynnika wypelnienia wzgledem podanje czestotliwosci
 
-    	if(cfg->n % (uint8_t)(FS/cfg->frequency) >= (uint8_t)sample_fill)
-   		{
-    		cfg->n++;
-    		y = cfg->amplitude;
+		// jezeli probka jest w przedziale podanego wypelnienia to jest + amplituda jezeli jest poza przedzialem czestotliwosci 
+		// wypelnienia to jest - amplituda
+		cfg->n++;
+    	if(cfg->n % (uint8_t)(FS/cfg->frequency) >= (uint8_t)sample_fill) 
+   		{	
+    		y = -(cfg->amplitude);
     	}
     	else{
-    		cfg->n++;
-    		y = -(cfg->amplitude);
+    		y = cfg->amplitude;
 		}
+		break;
+	case 3:		// type = 3 - sygnal trojkatny
+
+		break;
+	case 4:		// type = 4 - sygnal losowy o rozkladzie rownomiernym
+
+		break;
+	case 5:		// type = 5 - sygnal losowy o rozkladzie normalnym
+
 		break;
 	default:
 		break;
@@ -44,37 +64,11 @@ void OSC_SetAmplitude(OSC_Cfg_t *cfg, float A){
 	cfg->amplitude = A;
 }
 
-///////////////
+void OSC_SetFill (OSC_Cfg_t *cfg, float fill){
+	cfg->fill = fill;
+}
 
-// float sign_function(float wynik){
-// 	//return (wynik > 0) ? 1 : ((wynik < 0) ? -1 : 0);
-// 	if (wynik > 0) return 1;
-// 	if (wynik < 0) return -1;
-// 	return 0;
-// }
-
-// int8_t OSC_GetSquer(OSC_Cfg_t *cfg){
-// 	float y;
-	
-// 	float wynik = cfg->amplitude * (PDSP_2PI_DIV_FS * cfg->frequency * cfg->n);
-// 	y = sign_function(wynik);
-// 	cfg->n++;
-
-// 	return (int8_t)y;
-// }
-
-// int8_t OSC_GetSquer(OSC_Cfg_t * cfg){
-//     float y;
-//     float sample_fill = (cfg->fill/100.0f)*(FS/cfg->frequency);
-
-//     if(cfg->n % (uint8_t)(FS/cfg->frequency) >= (uint8_t)sample_fill)
-//     {
-//     	cfg->n++;
-//     	return -(cfg->amplitude);
-//     }
-//     else{
-//     	cfg->n++;
-//     	return cfg->amplitude;
-// 	}
-// }
+void OSC_SetType (OSC_Cfg_t *cfg, uint8_t type){
+	cfg->type = type;
+}
 

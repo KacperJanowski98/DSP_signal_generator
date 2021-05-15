@@ -1,9 +1,21 @@
+/**
+ * @file osc.h
+ * @author Kacper Janowski
+ * @brief 
+ * @version 0.1
+ * @date 2021-05-13
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #ifndef OSC_H_
 #define OSC_H_
 
+// include
 #include "stdint.h"
 #include "math.h"
 
+// define
 #define pdsp_sinf(fi)       sinf(fi)  
 #define FS					8000.0f
 #define PDSP_2PI_DIV_FS     ((M_PI *2.0f)/FS)
@@ -13,7 +25,7 @@
  * 
  */
 typedef struct {
-	uint8_t type;
+	uint8_t type;	// 1 - harmoniczny, 2 - prostokatny, 3 - trojkatny, 4 - sygnal losowy o rozkladzie rownomiernym, 5 - sygnal losowy o rozkladzie normalnym
 	float amplitude;
 	float frequency;
 	uint32_t n;
@@ -55,10 +67,20 @@ void OSC_SetFrequency(OSC_Cfg_t *cfg, float f);
  */
 void OSC_SetAmplitude(OSC_Cfg_t *cfg, float A);
 
-//////////////
+/**
+ * @brief Method to set fill signal
+ * 
+ * @param cfg Generator structure
+ * @param fill Fill parameter
+ */
+void OSC_SetFill (OSC_Cfg_t *cfg, float fill);
 
-// float sign_function(float wynik);
-
-// int8_t OSC_GetSquer(OSC_Cfg_t * cfg);
+/**
+ * @brief Method to set type of the oscillator
+ * 
+ * @param cfg Generator structure
+ * @param type 1 - harmoniczny, 2 - prostokatny, 3 - trojkatny, 4 - sygnal losowy o rozkladzie rownomiernym, 5 - sygnal losowy o rozkladzie normalnym
+ */
+void OSC_SetType (OSC_Cfg_t *cfg, uint8_t type);
 
 #endif  // OSC_H_
