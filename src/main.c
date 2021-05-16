@@ -17,11 +17,10 @@ OSC_Cfg_t Gen1;
 
 int main(int argc, char const *argv[])
 {
-    int type_Gen; 
     float amp;
     float freq;
     float fill_sig;
-    uint32_t number_s;
+    int number_s;
     int con = 1;
 
     printf("Wybierz oscylator:\n");
@@ -31,9 +30,9 @@ int main(int argc, char const *argv[])
     printf("4. Sygnal losowy o rozkladzie rownomiernym\n");
     printf("5. Sygnal losowy o rozkladzie normalnym\n");
 
-    scanf("%d", &type_Gen);
+    scanf("%d", &Gen1.type);
 
-    switch (type_Gen)
+    switch (Gen1.type)
     {
     case 1:     // 1. Sygnal harmoniczny
         while (con){
@@ -61,7 +60,7 @@ int main(int argc, char const *argv[])
         printf("Podaj liczbe probek\n");
         scanf("%d", &number_s);
 
-        OSC_Init(&Gen1, amp, freq, 0, 1);
+        OSC_Init(&Gen1, amp, freq, 0);
 
         f = fopen("test.m", "w");
 
@@ -69,7 +68,8 @@ int main(int argc, char const *argv[])
         for (uint32_t i = 0; i < number_s; i++){
             fprintf(f, "%d, ", OSC_GetValue(&Gen1));
         }
-        fprintf(f, "%d];", OSC_GetValue(&Gen1));
+        fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)", OSC_GetValue(&Gen1));
 
         fclose(f);
 
@@ -100,7 +100,7 @@ int main(int argc, char const *argv[])
         while (con){
             printf("Podaj wartosc wypenienia od 0 do 100\n");
             scanf("%f", &fill_sig);
-            if (fill_sig >= 100.0f){
+            if (fill_sig > 100.0f){
                 printf("Za duza wartosc!\n");
             } else {
                 printf("Poprawna wartosc\n");
@@ -111,7 +111,7 @@ int main(int argc, char const *argv[])
         printf("Podaj liczbe probek\n");
         scanf("%d", &number_s);
 
-        OSC_Init(&Gen1, amp, freq, fill_sig, 2);
+        OSC_Init(&Gen1, amp, freq, fill_sig);
         
         f = fopen("test.m", "w");
 
@@ -119,7 +119,8 @@ int main(int argc, char const *argv[])
         for (uint32_t i = 0; i < number_s; i++){
             fprintf(f, "%d, ", OSC_GetValue(&Gen1));
         }
-        fprintf(f, "%d];", OSC_GetValue(&Gen1));
+        fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)", OSC_GetValue(&Gen1));
 
         fclose(f);
 
@@ -150,7 +151,7 @@ int main(int argc, char const *argv[])
         while (con){
             printf("Podaj wartosc wypenienia od 0 do 100\n");
             scanf("%f", &fill_sig);
-            if (fill_sig >= 100.0f){
+            if (fill_sig > 100.0f){
                 printf("Za duza wartosc!\n");
             } else {
                 printf("Poprawna wartosc\n");
@@ -160,10 +161,21 @@ int main(int argc, char const *argv[])
 
         printf("Podaj liczbe probek\n");
         scanf("%d", &number_s);
+
+        OSC_Init(&Gen1, amp, freq, fill_sig);
+
+        f = fopen("test.m", "w");
+
+        fprintf(f,"y = [");
+        for (uint32_t i = 0; i < number_s; i++){
+            fprintf(f, "%d, ", OSC_GetValue(&Gen1));
+        }
+        fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)", OSC_GetValue(&Gen1));
+
+        fclose(f);
+
         break;
-
-        
-
     case 4:     // 4. Sygnal losowy o rozkladzie rownomiernym
 
         break;
@@ -171,7 +183,7 @@ int main(int argc, char const *argv[])
 
         break;
     default:
-
+        printf("Nie ma takego oscylatora!! Uruchom ponownie.");
         break;
     }
 

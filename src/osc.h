@@ -17,6 +17,7 @@
 
 // define
 #define pdsp_sinf(fi)       sinf(fi)  
+#define pdsp_asinf(fii)		asinf(fii)
 #define FS					8000.0f
 #define PDSP_2PI_DIV_FS     ((M_PI *2.0f)/FS)
 
@@ -28,7 +29,7 @@ typedef struct {
 	uint8_t type;	// 1 - harmoniczny, 2 - prostokatny, 3 - trojkatny, 4 - sygnal losowy o rozkladzie rownomiernym, 5 - sygnal losowy o rozkladzie normalnym
 	float amplitude;
 	float frequency;
-	uint32_t n;
+	int n;
 	float fill;
 }OSC_Cfg_t;
 
@@ -41,7 +42,7 @@ typedef struct {
  * @param sfill Fill signal
  * @param tp type of oscillator
  */
-void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill, uint8_t tp);
+void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill);
 
 /**
  * @brief Generator executing function
@@ -49,7 +50,7 @@ void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill, uint8_t tp);
  * @param cfg Generator structure
  * @return int8_t The function returns the determined signal samples
  */
-int8_t OSC_GetValue(OSC_Cfg_t *cfg);
+int OSC_GetValue(OSC_Cfg_t *cfg);
 
 /**
  * @brief Method for setting the oscillator frequency

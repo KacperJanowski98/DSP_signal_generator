@@ -10,15 +10,15 @@
  */
 #include "osc.h"
 
-void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill, uint8_t tp){
+void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill){
 	cfg->amplitude = A;
 	cfg->frequency = f;
 	cfg->n = 0;
 	cfg->fill = sfill;
-	cfg->type = tp;
+	cfg->type;
 }
 
-int8_t OSC_GetValue(OSC_Cfg_t *cfg){
+int OSC_GetValue(OSC_Cfg_t *cfg){
 	float y;
 	float sample_fill;
 	switch (cfg->type)
@@ -33,16 +33,18 @@ int8_t OSC_GetValue(OSC_Cfg_t *cfg){
 		// jezeli probka jest w przedziale podanego wypelnienia to jest + amplituda jezeli jest poza przedzialem czestotliwosci 
 		// wypelnienia to jest - amplituda
 		cfg->n++;
-    	if(cfg->n % (uint8_t)(FS/cfg->frequency) >= (uint8_t)sample_fill) 
+    	if(cfg->n % (int)(FS/cfg->frequency) >= (int)sample_fill) 
    		{	
-    		y = -(cfg->amplitude);
+    		y = cfg->amplitude;
     	}
     	else{
-    		y = cfg->amplitude;
+    		y = -(cfg->amplitude);
 		}
 		break;
 	case 3:		// type = 3 - sygnal trojkatny
-
+		sample_fill = (cfg->fill/100.0f)*(FS/cfg->frequency);
+		y = (2 * cfg->amplitude) / M_PI * pdsp_asinf(pdsp_sinf((PDSP_2PI_DIV_FS * cfg->frequency * cfg->n) / (int)sample_fill));
+		cfg->n++;
 		break;
 	case 4:		// type = 4 - sygnal losowy o rozkladzie rownomiernym
 
@@ -53,7 +55,7 @@ int8_t OSC_GetValue(OSC_Cfg_t *cfg){
 	default:
 		break;
 	}
-	return (int8_t)y;
+	return (int)y;
 }
 
 void OSC_SetFrequency(OSC_Cfg_t *cfg, float f){
@@ -71,4 +73,3 @@ void OSC_SetFill (OSC_Cfg_t *cfg, float fill){
 void OSC_SetType (OSC_Cfg_t *cfg, uint8_t type){
 	cfg->type = type;
 }
-
