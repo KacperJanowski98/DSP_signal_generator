@@ -22,6 +22,7 @@ int main(int argc, char const *argv[])
     float fill_sig;
     int number_s;
     int con = 1;
+    int s = 0;
 
     printf("Wybierz oscylator:\n");
     printf("1. Sygnal harmoniczny\n");
@@ -69,7 +70,7 @@ int main(int argc, char const *argv[])
             fprintf(f, "%d, ", OSC_GetValue(&Gen1));
         }
         fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
-        fprintf(f, "plot(y)", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)");
 
         fclose(f);
 
@@ -120,7 +121,7 @@ int main(int argc, char const *argv[])
             fprintf(f, "%d, ", OSC_GetValue(&Gen1));
         }
         fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
-        fprintf(f, "plot(y)", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)");
 
         fclose(f);
 
@@ -171,15 +172,70 @@ int main(int argc, char const *argv[])
             fprintf(f, "%d, ", OSC_GetValue(&Gen1));
         }
         fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
-        fprintf(f, "plot(y)", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)");
 
         fclose(f);
 
         break;
     case 4:     // 4. Sygnal losowy o rozkladzie rownomiernym
+        while (con){
+            printf("Podaj wartosc amplitudy w mV w zakresie od 0 do 1650\n");
+            scanf("%f", &amp);
+            if (amp > 1650.0f){
+                printf("Nasycenie\n");
+            } else {
+                printf("Poprawna wartosc\n");
+                con = 0;
+            }
+        }  
+
+        printf("Podaj liczbe probek\n");
+        scanf("%d", &number_s);  
+        
+        OSC_Init(&Gen1, amp, 0, 0);
+
+        f = fopen("test.m", "w");
+
+        fprintf(f,"y = [");
+        for (uint32_t i = 0; i < number_s; i++){
+            s = OSC_GetValue(&Gen1);
+            for (uint32_t j = 0; j < (1 + rand() % 6); j++){
+                fprintf(f, "%d, ", s);
+            }
+        }
+        fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)");
+
+        fclose(f); 
 
         break;
     case 5:     // 5. Sygnal losowy o rozkladzie normalnym
+        while (con){
+            printf("Podaj wartosc amplitudy w mV w zakresie od 0 do 1650\n");
+            scanf("%f", &amp);
+            if (amp > 1650.0f){
+                printf("Nasycenie\n");
+            } else {
+                printf("Poprawna wartosc\n");
+                con = 0;
+            }
+        }  
+
+        printf("Podaj liczbe probek\n");
+        scanf("%d", &number_s);  
+        
+        OSC_Init(&Gen1, amp, 0, 0);  
+
+        f = fopen("test.m", "w");
+
+        fprintf(f,"y = [");
+        for (uint32_t i = 0; i < number_s; i++){
+            fprintf(f, "%d, ", OSC_GetValue(&Gen1));
+        }
+        fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
+        fprintf(f, "plot(y)");
+
+        fclose(f); 
 
         break;
     default:

@@ -21,6 +21,9 @@ void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill){
 int OSC_GetValue(OSC_Cfg_t *cfg){
 	float y;
 	float sample_fill;
+	float left;
+	float right;
+
 	switch (cfg->type)
 	{
 	case 1:		// type = 1 - sygnal harmoniczny
@@ -35,10 +38,10 @@ int OSC_GetValue(OSC_Cfg_t *cfg){
 		cfg->n++;
     	if(cfg->n % (int)(FS/cfg->frequency) >= (int)sample_fill) 
    		{	
-    		y = cfg->amplitude;
+    		y = 0;
     	}
     	else{
-    		y = -(cfg->amplitude);
+    		y = cfg->amplitude;
 		}
 		break;
 	case 3:		// type = 3 - sygnal trojkatny
@@ -47,10 +50,17 @@ int OSC_GetValue(OSC_Cfg_t *cfg){
 		cfg->n++;
 		break;
 	case 4:		// type = 4 - sygnal losowy o rozkladzie rownomiernym
-
+        y = (rand() % (int)(cfg->amplitude - (-cfg->amplitude) + 1)) + (-cfg->amplitude);
 		break;
 	case 5:		// type = 5 - sygnal losowy o rozkladzie normalnym
+		left = ((double)(rand()) + 1.0) / ((double)(cfg->amplitude) + 1.0);
+		right = ((double)(rand()) + 1.0) / ((double)(cfg->amplitude) + 1.0);
 
+		float sigma = (cfg->amplitude) / 3;
+
+		float y1;
+		y1 = cos(2*M_PI*right) * sqrt(abs(-2*log(left)));
+		y = sigma*y1;
 		break;
 	default:
 		break;

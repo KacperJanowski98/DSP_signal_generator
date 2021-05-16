@@ -14,6 +14,8 @@
 // include
 #include "stdint.h"
 #include "math.h"
+#include "time.h"
+#include "stdlib.h"
 
 // define
 #define pdsp_sinf(fi)       sinf(fi)  
