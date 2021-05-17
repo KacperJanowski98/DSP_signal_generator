@@ -10,6 +10,8 @@
  */
 #include "osc.h"
 
+float randval;
+
 void OSC_Init(OSC_Cfg_t *cfg, float A, float f, float sfill){
 	cfg->amplitude = A;
 	cfg->frequency = f;
@@ -50,7 +52,11 @@ int OSC_GetValue(OSC_Cfg_t *cfg){
 		cfg->n++;
 		break;
 	case 4:		// type = 4 - sygnal losowy o rozkladzie rownomiernym
-        y = (rand() % (int)(cfg->amplitude - (-cfg->amplitude) + 1)) + (-cfg->amplitude);
+		if (cfg->n % (1 + rand() % 6) == 0){
+			randval = (rand() % (int)(cfg->amplitude - (-cfg->amplitude) + 1)) + (-cfg->amplitude);
+		}
+		cfg->n++;
+		y = randval;
 		break;
 	case 5:		// type = 5 - sygnal losowy o rozkladzie normalnym
 		left = ((double)(rand()) + 1.0) / ((double)(cfg->amplitude) + 1.0);

@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     float fill_sig;
     int number_s;
     int con = 1;
-    int s = 0;
+    int val = 0;
 
     printf("Wybierz oscylator:\n");
     printf("1. Sygnal harmoniczny\n");
@@ -198,15 +198,12 @@ int main(int argc, char const *argv[])
 
         fprintf(f,"y = [");
         for (uint32_t i = 0; i < number_s; i++){
-            s = OSC_GetValue(&Gen1);
-            for (uint32_t j = 0; j < (1 + rand() % 6); j++){
-                fprintf(f, "%d, ", s);
-            }
+            fprintf(f, "%d, ", OSC_GetValue(&Gen1));
         }
         fprintf(f, "%d];\n", OSC_GetValue(&Gen1));
         fprintf(f, "plot(y)");
 
-        fclose(f); 
+        fclose(f);
 
         break;
     case 5:     // 5. Sygnal losowy o rozkladzie normalnym
